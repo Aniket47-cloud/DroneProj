@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import CameraView from "./CameraView";
 import React from "react";
+import { LuCompass } from "react-icons/lu";
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -75,7 +76,7 @@ export default function DroneMap({ dronePosition, droneData, batteryLevel, conne
     return (
       <div className="flex items-center justify-center h-full bg-gray-900 text-white">
         <div className="animate-spin mr-2">
-          <Compass size={24} />
+          <LuCompass size={24} />
         </div>
         <span style={{ fontFamily: "'NASALIZATION', sans-serif" }}>LOADING LOCATION...</span>
       </div>
@@ -84,10 +85,16 @@ export default function DroneMap({ dronePosition, droneData, batteryLevel, conne
 
   return (
     <div className="relative h-full bg-gray-900 overflow-hidden">
-      <MapContainer center={currentLocation} zoom={16} style={{ height: "100%", background: "#f0f0f0" }} zoomControl={false} ref={mapRef}>
+      {/* Camera View Positioned at Top-Right ABOVE Map */}
+      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-50 w-[320px] h-[240px] shadow-lg rounded-lg border-2 border-purple-500">
+        <CameraView droneData={droneData} videoRef={videoRef} />
+      </div>
+
+      {/* Map Container */}
+      <MapContainer center={currentLocation} zoom={16} style={{ height: "calc(100vh - 250px)", marginTop: "250px", background: "#f0f0f0" }} zoomControl={false} ref={mapRef}>
         <MapUpdater center={currentLocation} zoom={16} />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
-        <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community" />
+        <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
         {flightPath.length > 1 && <Polyline positions={flightPath} color="#9333ea" weight={3} opacity={0.8} dashArray="5, 10" />}
         <Marker position={currentLocation} icon={homeIcon}>
           <Popup>
@@ -113,7 +120,8 @@ export default function DroneMap({ dronePosition, droneData, batteryLevel, conne
           </Marker>
         )}
       </MapContainer>
-      <CameraView droneData={droneData} videoRef={videoRef} />
+
+      {/* Location Error Message */}
       {locationError && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 bg-opacity-90 text-white p-3 rounded-md z-10">
           {locationError}

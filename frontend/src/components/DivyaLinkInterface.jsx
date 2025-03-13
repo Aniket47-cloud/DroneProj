@@ -37,13 +37,13 @@ export default function DivyalinkInterface() {
   }, []);
 
   // Handle navigation button clicks
-  const handleNavClick = (tabName: string) => {
+  const handleNavClick = (tabName) => {
     setActiveTab(tabName);
     setTimeout(() => setStatusMessage(""), 3000);
   };
 
   // Handle tab button clicks
-  const handleTabButtonClick = (tabName: string) => {
+  const handleTabButtonClick = (tabName) => {
     setActiveTabButton(tabName);
     setTimeout(() => setStatusMessage(""), 3000);
   };
@@ -131,6 +131,65 @@ export default function DivyalinkInterface() {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel */}
         <div className="w-1/3 border-r border-purple-800 flex flex-col overflow-hidden bg-gray-900">
+
+                      {/* Attitude Indicator */}
+                      <div className="relative h-1/2 bg-gradient-to-b from-purple-900 to-indigo-900 flex flex-col items-center">
+                <div className="absolute top-0 left-0 right-0 flex justify-between px-4 py-2 bg-purple-900 bg-opacity-70">
+                  <div className="text-xs" style={{ fontFamily: "'NASALIZATION', sans-serif" }}>
+                    TIME: {currentTime}
+                  </div>
+                  <div className="text-xs" style={{ fontFamily: "'NASALIZATION', sans-serif" }}>
+                    ALTITUDE: {droneData.altitude.toFixed(1)}m
+                  </div>
+                </div>
+
+                {/* Circular Attitude Indicator */}
+                <div className="relative w-48 h-48 mt-12">
+                  <div className="absolute inset-0 rounded-full border-2 border-purple-400 overflow-hidden">
+                    {/* Sky and Ground */}
+                    <div className="absolute inset-0 flex flex-col">
+                      <div className="h-1/2 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+                      <div className="h-1/2 bg-gradient-to-b from-amber-600 to-amber-800"></div>
+                    </div>
+
+                    {/* Horizon Line */}
+                    <div className="absolute top-1/2 left-0 right-0 h-1 bg-white"></div>
+
+                    {/* Pitch Lines */}
+                    <div className="absolute top-[40%] left-0 right-0 h-px bg-white"></div>
+                    <div className="absolute top-[45%] left-0 right-0 h-px bg-white"></div>
+                    <div className="absolute top-[55%] left-0 right-0 h-px bg-white"></div>
+                    <div className="absolute top-[60%] left-0 right-0 h-px bg-white"></div>
+
+                    {/* Center Indicator */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-1 bg-yellow-400"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-16 bg-yellow-400"></div>
+
+                    {/* Arm Status */}
+                    <div className="absolute bottom-6 left-0 right-0 flex justify-center">
+                      <div
+                        className={`text-xl font-bold ${isArmed ? "text-green-400" : "text-red-400"}`}
+                        style={{ fontFamily: "'NASALIZATION', sans-serif" }}
+                      >
+                        {isArmed ? "ARMED" : "DISARMED"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status Text */}
+                <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 py-1 bg-purple-900 bg-opacity-80 text-xs">
+                  <div
+                    className={isArmed ? "text-green-400" : "text-red-400"}
+                    style={{ fontFamily: "'NASALIZATION', sans-serif" }}
+                  >
+                    {isArmed ? "READY TO FLY" : "NOT READY TO ARM"}
+                  </div>
+                  <div className="text-yellow-400" style={{ fontFamily: "'NASALIZATION', sans-serif" }}>
+                    {connected ? "CONNECTED" : "DISCONNECTED"}
+                  </div>
+                </div>
+              </div>
           {/* Tab Navigation */}
           <div className="flex text-xs bg-gray-800 border-t border-b border-gray-700">
             <TabButton label="Quick" active={activeTabButton === "Quick"} onClick={() => handleTabButtonClick("Quick")} />

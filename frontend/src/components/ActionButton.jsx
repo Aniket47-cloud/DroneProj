@@ -1,13 +1,6 @@
-import { ReactNode } from "react";
 import React from "react";
-interface ActionButtonProps {
-  icon: ReactNode;
-  label: string;
-  onClick: () => void;
-  color?: string;
-}
 
-export default function ActionButton({ icon, label, onClick, color = "bg-purple-600" }: ActionButtonProps) {
+export default function ActionButton({ icon, label, onClick, color = "bg-purple-600" }) {
   return (
     <button
       className={`${color} hover:opacity-90 text-white p-3 rounded-lg flex flex-col items-center justify-center w-full transition-all duration-200 transform hover:scale-105`}
